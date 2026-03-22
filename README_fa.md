@@ -41,7 +41,20 @@
    اعلام می‌کند اندازه‌گیری می‌شود. بزرگ‌تر = داده بیشتر در هر DNS query = throughput بالاتر.
    Resolver هایی که زیر آستانه تنظیم‌شده هستند حذف می‌شوند.
 
-6. Tunnel Test (MasterDnsVPN MTU Engine)
+3. DoH (DNS-over-HTTPS)
+   IP هایی که از Port 53 رد شده‌اند را می‌گیرد و چک می‌کند آیا DNS-over-HTTPS
+   روی port 443 پشتیبانی می‌کنند (RFC 8484 — HTTP POST به /dns-query).
+   ترافیک DoH از HTTPS معمولی قابل تشخیص نیست. برخلاف سایر مراحل، DoH
+   gate سخت نیست — اگر هیچ IP ای رد نشد، pipeline با نتایج Port 53 ادامه می‌دهد.
+   دکمه "Pass on" همیشه فعال است تا بتوانید حتی با 0 نتیجه ادامه دهید.
+
+4. Recursion Check  (قبلاً مرحله ۳ بود)
+
+5. NXDOMAIN / Hijack Detection  (قبلاً مرحله ۴)
+
+6. EDNS Payload Size  (قبلاً مرحله ۵)
+
+7. Tunnel Test (MasterDnsVPN MTU Engine)
    تست واقعی end-to-end. از MTU engine خود کلاینت MasterDnsVPN برای اجرای
    MTU discovery handshake با domain شما استفاده می‌کند. فقط resolver هایی که
    هر دو negotiate upload MTU و download MTU را با موفقیت انجام دهند قبول می‌شوند.
@@ -77,7 +90,7 @@ Pipeline در چهار حالت اجرا می‌شود: **Full Scan Once**، **L
 | Recursion Check | ✅ | ✅ |
 | NXDOMAIN Hijack Detection | ✅ | ✅ |
 | EDNS Payload Size | ✅ | ✅ |
-| DoH (DNS-over-HTTPS) | ✅ | ❌ |
+| DoH (DNS-over-HTTPS) | ✅ | ✅ |
 | End-to-End Tunnel Test | dnstt / slipstream | MasterDnsVPN MTU engine |
 | Windows `.exe` | ❌ | ✅ |
 | تنظیمات persistent | ❌ | ✅ |
