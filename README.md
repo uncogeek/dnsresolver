@@ -41,7 +41,24 @@ Every IP you load gets pushed through these six stages in order. Failed IPs are 
    advertises. Larger = more data per DNS query = faster tunnel throughput.
    Resolvers below your configured minimum are dropped.
 
-6. Tunnel Test (MasterDnsVPN MTU Engine)
+3. DoH (DNS-over-HTTPS)
+   Takes the Port 53 survivors and checks whether they speak DNS-over-HTTPS
+   on port 443 (RFC 8484 — HTTP POST to /dns-query). DoH traffic is
+   indistinguishable from regular HTTPS at the firewall level. Unlike the
+   other stages, DoH is not a hard gate — if zero IPs pass, the pipeline
+   falls through to Recursive using the Port 53 results. The "Pass on"
+   button is always enabled so you can skip forward even with 0 DoH results.
+
+4. Recursion Check
+   (previously stage 3 — takes DoH results or Port 53 fallback)
+
+5. NXDOMAIN / Hijack Detection
+   (previously stage 4)
+
+6. EDNS Payload Size
+   (previously stage 5)
+
+7. Tunnel Test (MasterDnsVPN MTU Engine)
    The real end-to-end test. Uses MasterDnsVPN's own client engine to run
    an MTU discovery handshake against your domain. Only resolvers that
    complete both upload and download MTU negotiation are accepted.
@@ -77,7 +94,7 @@ The pipeline runs in **Full Scan Once**, **Loop**, **Interval**, or **Refine** m
 | Recursion Check | ✅ | ✅ |
 | NXDOMAIN Hijack Detection | ✅ | ✅ |
 | EDNS Payload Size | ✅ | ✅ |
-| DoH (DNS-over-HTTPS) | ✅ | ❌ |
+| DoH (DNS-over-HTTPS) | ✅ | ✅ |
 | End-to-End Tunnel Test | dnstt / slipstream | MasterDnsVPN MTU engine |
 | Windows `.exe` | ❌ | ✅ |
 | Persistent settings | ❌ | ✅ |
