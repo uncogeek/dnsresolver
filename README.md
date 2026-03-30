@@ -1,5 +1,7 @@
 # MasterResolver
 
+## I will upload all of the sources soon...
+
 **A GUI-based DNS resolver scanner for [MasterDnsVPN](https://github.com/masterking32/MasterDnsVPN).**
 
 When you run MasterDnsVPN, it tunnels your traffic through open DNS resolvers — but finding ones that actually work with your server's domain takes time. This tool scans thousands of IPs through a six-stage pipeline and hands you only the resolvers that pass every test, ready to drop into your client config.
